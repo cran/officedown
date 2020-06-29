@@ -53,7 +53,7 @@ rpptx_document <- function(base_format = "rmarkdown::powerpoint_presentation",
 
   args <- list(...)
   if(is.null(args$reference_doc)){
-    reference_doc <- get_default_pandoc_data_file(format = "pptx")
+    reference_doc <- officer:::get_default_pandoc_data_file(format = "pptx")
   } else reference_doc <- args$reference_doc
   new_reference_doc <- tempfile(fileext = ".pptx")
   officer::annotate_base(reference_doc, output_file = new_reference_doc)
@@ -117,20 +117,3 @@ get_pptx_uncached <- function() {
 #' @importFrom memoise memoise
 get_reference_pptx <- memoise(get_pptx_uncached)
 
-#' @importFrom rmarkdown pandoc_available pandoc_exec
-get_default_pandoc_data_file <- function(format = "pptx") {
-  outfile <- tempfile(fileext = paste0(".", format))
-
-  pandoc_exec <- pandoc_exec()
-  if(!pandoc_available() || !file.exists(pandoc_exec)){
-    file.copy(system.file(package = "officer", "template", paste0("template.", format)),
-              to = outfile)
-  } else {
-    ref_doc <- paste0("reference.", format)
-    system2(pandoc_exec,
-            args = c("--print-default-data-file", ref_doc),
-            stdout = outfile)
-  }
-
-  return(outfile)
-}

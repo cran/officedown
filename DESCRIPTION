@@ -1,7 +1,7 @@
 Package: officedown
 Type: Package
 Title: Enhanced 'R Markdown' Format for 'Word' and 'PowerPoint'
-Version: 0.1.0
+Version: 0.2.0
 Authors@R: c(
     person("David", "Gohel", role = c("aut", "cre", "cph"),
     email = "david.gohel@ardata.fr"),
@@ -23,17 +23,16 @@ Description: Allows production of 'Microsoft' corporate documents from 'R Markdo
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
-Imports: knitr, rmarkdown, bookdown (>= 0.13), officer (>= 0.3.11),
-        xml2, rlang, uuid, grDevices, yaml, utils, memoise, rvg (>=
-        0.2.2)
-Suggests: ggplot2, flextable
+Imports: knitr, rmarkdown, officer (>= 0.3.12), xml2, rlang, uuid,
+        grDevices, yaml, utils, memoise, rvg (>= 0.2.2)
+Suggests: ggplot2, flextable, bookdown (>= 0.13)
 URL: https://davidgohel.github.io/officedown
 BugReports: https://github.com/davidgohel/officedown/issues
 RoxygenNote: 7.1.0
 SystemRequirements: pandoc (>= 2.0) - http://pandoc.org
 VignetteBuilder: knitr
 NeedsCompilation: no
-Packaged: 2020-06-03 15:12:26 UTC; davidgohel
+Packaged: 2020-06-29 18:44:34 UTC; davidgohel
 Author: David Gohel [aut, cre, cph],
   Institut für Qualitätssicherung und Transparenz im Gesundheitswesen
     [fnd],
@@ -41,4 +40,4 @@ Author: David Gohel [aut, cre, cph],
   ArData [cph]
 Maintainer: David Gohel <david.gohel@ardata.fr>
 Repository: CRAN
-Date/Publication: 2020-06-03 16:10:02 UTC
+Date/Publication: 2020-06-29 19:30:03 UTC
