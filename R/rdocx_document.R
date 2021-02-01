@@ -20,6 +20,23 @@ file_with_meta_ext <- function(file, meta_ext, ext = tools::file_ext(file)) {
   )
 }
 
+absolute_path <- function(x){
+  if (length(x) != 1L)
+    stop("'x' must be a single character string")
+  epath <- path.expand(x)
+  if( file.exists(epath)){
+    epath <- normalizePath(epath, "/", mustWork = TRUE)
+  } else {
+    if( !dir.exists(dirname(epath)) ){
+      stop("directory of ", x, " does not exist.", call. = FALSE)
+    }
+    cat("", file = epath)
+    epath <- normalizePath(epath, "/", mustWork = TRUE)
+    unlink(epath)
+  }
+  epath
+}
+
 # tables_default_values ----
 tables_default_values <- list(
   style = "Table",
@@ -257,6 +274,8 @@ get_reference_rdocx <- memoise(get_docx_uncached)
 #'
 #' docx_file_1 <- tempfile(fileext = ".docx")
 #' render(rmd_file, output_file = docx_file_1, quiet = TRUE)
+#' render(rmd_file, output_file = docx_file_1, quiet = TRUE,
+#'   intermediates_dir = tempfile())
 #'
 #' # bookdown example -----
 #' if(require("bookdown")){
@@ -300,6 +319,7 @@ rdocx_document <- function(base_format = "rmarkdown::word_document",
       "bookdown", "template.docx"
     )
   }
+  args$reference_docx <- absolute_path(args$reference_docx)
 
   base_format_fun <- get_fun(base_format)
   output_formats <- do.call(base_format_fun, args)
@@ -338,19 +358,31 @@ rdocx_document <- function(base_format = "rmarkdown::word_document",
   }
   output_formats$knitr$knit_hooks$plot <- plot_word_fig_caption
 
-  output_formats$post_knit <- function(metadata, input_file, runtime, ...){
+  # This is the intermediate_dir and wll be updated if `intermediates_generator` is called
+  intermediate_dir <- "."
+
+  temp_intermediates_generator <- output_formats$intermediates_generator
+  output_formats$intermediates_generator <- function(...){
+    intermediate_dir <<- list(...)[[2]]
+    temp_intermediates_generator(...)
+  }
+
+  output_formats$post_knit <- function(
+    metadata, input_file, runtime, ...){
     output_file <- file_with_meta_ext(input_file, "knit", "md")
+    output_file <- file.path(intermediate_dir, output_file)
     content <- readLines(output_file)
 
     content <- post_knit_table_captions(content,
-      tab.cap.pre = tables$caption$pre, tab.cap.sep = tables$caption$sep,
-      style = tables$caption$style)
+                                        tab.cap.pre = tables$caption$pre, tab.cap.sep = tables$caption$sep,
+                                        style = tables$caption$style)
     content <- post_knit_caption_references(content, lp = "tab:")
     content <- post_knit_caption_references(content, lp = "fig:")
     content <- post_knit_std_references(content, numbered = reference_num)
     content <- block_macro(content)
     writeLines(content, output_file)
   }
+
 
   output_formats$post_processor <- function(metadata, input_file, output_file, clean, verbose) {
     x <- officer::read_docx(output_file)
@@ -359,7 +391,6 @@ rdocx_document <- function(base_format = "rmarkdown::word_document",
     x <- process_embedded_docx(x)
     x <- process_par_settings(x)
     x <- process_list_settings(x, ul_style = lists$ul.style, ol_style = lists$ol.style)
-    x <- process_sections(x)
     x <- change_styles(x, mapstyles = mapstyles)
     forget(get_reference_rdocx)
     print(x, target = output_file)

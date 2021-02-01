@@ -1,14 +1,11 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-[![Travis build
-status](https://travis-ci.org/davidgohel/officedown.svg?branch=master)](https://travis-ci.org/davidgohel/officedown)
-[![AppVeyor build
-status](https://ci.appveyor.com/api/projects/status/github/davidgohel/officedown?branch=master&svg=true)](https://ci.appveyor.com/project/davidgohel/officedown)
-[![lifecycle](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
-[![CRAN
-status](https://www.r-pkg.org/badges/version/officedown)](https://cran.r-project.org/package=officedown)
+[![R build
+status](https://github.com/davidgohel/officedown/workflows/R-CMD-check/badge.svg)](https://github.com/davidgohel/officedown/actions)
+[![version](https://www.r-pkg.org/badges/version/officedown)](https://CRAN.R-project.org/package=officedown)
 ![cranlogs](https://cranlogs.r-pkg.org/badges/officedown)
+![Active](https://www.repostatus.org/badges/latest/active.svg)
 
 > `{officedown}` is bringing some
 > [officer](https://cran.r-project.org/package=officer) features into R
@@ -83,6 +80,16 @@ It becomes easy to add several contents in the same slide.
 The package also offers the possibility to transform your graphic
 instructions into editable vector graphics (with the rvg package) by
 simply wrapping your call into a call to function `dml`.
+
+## Ressources
+
+The help pages are in a bookdown located at:
+
+<https://ardata-fr.github.io/officeverse/>
+
+Manuals are available at:
+
+<https://davidgohel.github.io/officedown/>.
 
 ## Installation
 
