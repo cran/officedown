@@ -10,6 +10,8 @@ rdocx_document(
   plots = list(),
   lists = list(),
   mapstyles = list(),
+  page_size = list(),
+  page_margins = list(),
   reference_num = TRUE,
   ...
 )
@@ -17,7 +19,12 @@ rdocx_document(
 \arguments{
 \item{base_format}{a scalar character, format to be used as a base document for
 officedown. default to \link[rmarkdown:word_document]{word_document} but
-can also be word_document2 from bookdown}
+can also be word_document2 from bookdown.
+
+When the \code{base_format} used is \code{bookdown::word_document2}, the \code{number_sections}
+parameter is automatically set to \code{FALSE}. Indeed, if you want numbered titles,
+you are asked to use a Word document template with auto-numbered titles (the title
+styles of the default `rdocx_document' template are already set to FALSE).}
 
 \item{tables}{a list that can contain few items to style tables and table captions.
 Missing items will be replaced by default values. Possible items are the following:
@@ -72,6 +79,7 @@ Missing items will be replaced by default values. Possible items are the followi
 \item \code{style}: the Word stylename to use for plots.
 \item \code{align}: alignment of figures in the output document (possible values are 'left',
 'right' and 'center').
+\item \code{topcaption}: caption will appear before (on top of) the figure,
 \item \code{caption}; caption options, i.e.:
 \itemize{
 \item \code{style}: Word stylename to use for figure captions.
@@ -81,7 +89,7 @@ Missing items will be replaced by default values. Possible items are the followi
 }
 
 Default value is (in R format):\preformatted{list(
-  style = "Normal", align = "center",
+  style = "Normal", align = "center", topcaption = FALSE,
   caption = list(
     style = "Image Caption",
     pre = "Figure ",
@@ -92,6 +100,7 @@ Default value is (in R format):\preformatted{list(
 
 Default value is (in YAML format):\preformatted{style: Normal
 align: center
+topcaption: false
 caption:
   style: Image Caption
   pre: 'Figure '
@@ -110,6 +119,9 @@ ul.style: null
 document. \code{list("Normal" = c("Author", "Date"))} will result in a document where
 all paragraphs styled with stylename "Date" and "Author" will be then styled with
 stylename "Normal".}
+
+\item{page_size, page_margins}{default page and margins dimensions, these values are used to define the default Word section.
+See \code{\link[=page_size]{page_size()}} and \code{\link[=page_mar]{page_mar()}}.}
 
 \item{reference_num}{if TRUE, text for references to sections will be
 the section number (e.g. '3.2'). If FALSE, text for references to sections
@@ -181,6 +193,18 @@ output:
       ul.style: null
     mapstyles:
       Normal: ['First Paragraph', 'Author', 'Date']
+    page_size:
+      width: 8.3
+      height: 11.7
+      orient: "portrait"
+    page_margins:
+      bottom: 1
+      top: 1
+      right: 1.25
+      left: 1.25
+      header: 0.5
+      footer: 0.5
+      gutter: 0.5
     reference_num: true
 ---
 }
