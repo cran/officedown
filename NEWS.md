@@ -1,3 +1,16 @@
+# officedown 0.2.3
+
+## new feature
+
+* support for knitr chunk options `tab.topcaption` and `tab.lp`.
+* support for knitr chunk options `tab.cap.tnd`, `tab.cap.tns` and `tab.cap.fp_text` 
+that let define prefix for auto-number table captions. Same with 
+`fig.cap.tnd`, `fig.cap.tns` and `fig.cap.fp_text` for plots.
+
+## Issues
+
+* fix issue missing Word headers and footers.
+
 # officedown 0.2.2
 
 ## new feature

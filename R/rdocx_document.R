@@ -42,9 +42,14 @@ tables_default_values <- list(
   style = "Table",
   layout = "autofit",
   width = 1,
+  tab.lp = "tab:",
+  topcaption = FALSE,
   caption = list(
     style = "Table Caption",
-    pre = "Table ", sep = ": "
+    pre = "Table ", sep = ": ",
+    tnd = 0,
+    tns = "-",
+    fp_text = fp_text_lite(bold = TRUE)
   ),
   conditional = list(
     first_row = TRUE,
@@ -60,10 +65,14 @@ tables_default_values <- list(
 plots_default_values <- list(
   style = "Figure",
   align = "center",
+  fig.lp = "fig:",
   topcaption = FALSE,
   caption = list(
     style = "Image Caption",
-    pre = "Figure ", sep = ": "
+    pre = "Figure ", sep = ": ",
+    tnd = 0,
+    tns = "-",
+    fp_text = fp_text_lite(bold = TRUE)
   )
 )
 
@@ -122,37 +131,40 @@ get_reference_rdocx <- memoise(get_docx_uncached)
 #' * `style`: the Word stylename to use for tables.
 #' * `layout`: 'autofit' or 'fixed' algorithm. See \code{\link[officer]{table_layout}}.
 #' * `width`: value of the preferred width of the table in percent (base 1).
+#' * `tab.lp`: caption table sequence identifier. All table captions are supposed
+#' to have the same identifier. It makes possible to insert list of tables. It is
+#' also used to prefix your 'bookdown' cross-reference call; if `tab.lp` is set to
+#' "tab:", a cross-reference to table with id "xxxxx" is written as `\@ref(tab:xxxxx)`.
+#' It is possible to set the value to your default Word value (in French for example it
+#' is "Tableau", in German it is "Tabelle"), you can then add manually a list of
+#' tables (go to the "References" tab and select menu "Insert Table of Figures").
 #' * `caption`; caption options, i.e.:
 #'   * `style`: Word stylename to use for table captions.
 #'   * `pre`: prefix for numbering chunk (default to "Table ").
 #'   * `sep`: suffix for numbering chunk (default to ": ").
+#'   * `tnd`: (only applies if positive. )Inserts the number of the last title of level `tnd` (i.e. 4.3-2 for figure 2 of chapter 4.3).
+#'   * `tns`: separator to use between title number and table number. Default is "-".
+#'   * `fp_text`: text formatting properties to apply to caption prefix - see [fp_text_lite()].
 #' * `conditional`: a list of named logical values:
 #'   * `first_row` and `last_row`: apply or remove formatting from the first or last row in the table
 #'   * `first_column`  and `last_column`: apply or remove formatting from the first or last column in the table
 #'   * `no_hband` and `no_vband`: don't display odd and even rows or columns with alternating shading for ease of reading.
 #'
-#' Default value is (in R format):
-#' ```
-#' list(
-#'    style = "Table", layout = "autofit", width = 1,
-#'    caption = list(
-#'      style = "Table Caption", pre = "Table ", sep = ": "),
-#'    conditional = list(
-#'      first_row = TRUE, first_column = FALSE, last_row = FALSE,
-#'      last_column = FALSE, no_hband = FALSE, no_vband = TRUE
-#'    )
-#' )
-#' ```
 #'
 #' Default value is (in YAML format):
 #' ```
 #' style: Table
 #' layout: autofit
 #' width: 1.0
+#' topcaption: true
+#' tab.lp: 'tab:'
 #' caption:
 #'   style: Table Caption
 #'   pre: 'Table '
 #'   sep: ': '
+#'   tnd: 0
+#'   tns: '-'
+#'   fp_text: !expr officer::fp_text_lite(bold = TRUE)
 #' conditional:
 #'   first_row: true
 #'   first_column: false
@@ -169,32 +181,35 @@ get_reference_rdocx <- memoise(get_docx_uncached)
 #' * `align`: alignment of figures in the output document (possible values are 'left',
 #' 'right' and 'center').
 #' * `topcaption`: caption will appear before (on top of) the figure,
+#' * `fig.lp`: caption figure sequence identifier. All figure captions are supposed
+#' to have the same identifier. It makes possible to insert list of figures. It is
+#' also used to prefix your 'bookdown' cross-reference call; if `fig.lp` is set to
+#' "fig:", a cross-reference to figure with id "xxxxx" is written as `\@ref(fig:xxxxx)`.
+#' It is possible to set the value to your default Word value (in French for example it
+#' is "Figure"), you can then add manually a list of
+#' figures (go to the "References" tab and select menu "Insert Table of Figures").
 #' * `caption`; caption options, i.e.:
 #'   * `style`: Word stylename to use for figure captions.
 #'   * `pre`: prefix for numbering chunk (default to "Figure ").
 #'   * `sep`: suffix for numbering chunk (default to ": ").
+#'   * `tnd`: (only applies if positive. )Inserts the number of the last title of level `tnd` (i.e. 4.3-2 for figure 2 of chapter 4.3).
+#'   * `tns`: separator to use between title number and figure number. Default is "-".
+#'   * `fp_text`: text formatting properties to apply to caption prefix - see [fp_text_lite()].
 #'
-#' Default value is (in R format):
-#' ```
-#' list(
-#'   style = "Normal", align = "center", topcaption = FALSE,
-#'   caption = list(
-#'     style = "Image Caption",
-#'     pre = "Figure ",
-#'     sep = ": "
-#'    )
-#'  )
-#'  ```
 #'
 #' Default value is (in YAML format):
 #' ```
 #' style: Normal
 #' align: center
 #' topcaption: false
+#' fig.lp: 'fig:'
 #' caption:
 #'   style: Image Caption
 #'   pre: 'Figure '
 #'   sep: ': '
+#'   tnd: 0
+#'   tns: '-'
+#'   fp_text: !expr officer::fp_text_lite(bold = TRUE)
 #' ```
 #' @param lists a list containing two named items `ol.style` and
 #' `ul.style`, values are the stylenames to be used to replace the style of ordered
@@ -261,10 +276,15 @@ get_reference_rdocx <- memoise(get_docx_uncached)
 #'       style: Table
 #'       layout: autofit
 #'       width: 1.0
+#'       topcaption: true
+#'       tab.lp: 'tab:'
 #'       caption:
 #'         style: Table Caption
 #'         pre: 'Table '
 #'         sep: ': '
+#'         tnd: 0
+#'         tns: '-'
+#'         fp_text: !expr officer::fp_text_lite(bold = TRUE)
 #'       conditional:
 #'         first_row: true
 #'         first_column: false
@@ -275,10 +295,15 @@ get_reference_rdocx <- memoise(get_docx_uncached)
 #'     plots:
 #'       style: Normal
 #'       align: center
+#'       fig.lp: 'fig:'
+#'       topcaption: false
 #'       caption:
 #'         style: Image Caption
 #'         pre: 'Figure '
 #'         sep: ': '
+#'         tnd: 0
+#'         tns: '-'
+#'         fp_text: !expr officer::fp_text_lite(bold = TRUE)
 #'     lists:
 #'       ol.style: null
 #'       ul.style: null
@@ -379,7 +404,11 @@ rdocx_document <- function(base_format = "rmarkdown::word_document",
     list(tab.cap.style = tables$caption$style,
          tab.cap.pre = tables$caption$pre,
          tab.cap.sep = tables$caption$sep,
-         tab.lp = "tab:",
+         tab.cap.tnd = tables$caption$tnd,
+         tab.cap.tns = tables$caption$tns,
+         tab.cap.fp_text = tables$caption$fp_text,
+         tab.lp = tables$tab.lp,
+         tab.topcaption = tables$topcaption,
          tab.style = tables$style,
          tab.width = tables$width,
 
@@ -393,9 +422,12 @@ rdocx_document <- function(base_format = "rmarkdown::word_document",
          fig.cap.style = plots$caption$style,
          fig.cap.pre = plots$caption$pre,
          fig.cap.sep = plots$caption$sep,
+         fig.cap.tnd = plots$caption$tnd,
+         fig.cap.tns = plots$caption$tns,
+         fig.cap.fp_text = plots$caption$fp_text,
          fig.align = plots$align,
          fig.style = plots$style,
-         fig.lp = "fig:",
+         fig.lp = plots$fig.lp,
          fig.topcaption = plots$topcaption
          )
     )
@@ -419,11 +451,19 @@ rdocx_document <- function(base_format = "rmarkdown::word_document",
     output_file <- file.path(intermediate_dir, output_file)
     content <- readLines(output_file)
 
-    content <- post_knit_table_captions(content,
-                                        tab.cap.pre = tables$caption$pre, tab.cap.sep = tables$caption$sep,
-                                        style = tables$caption$style)
-    content <- post_knit_caption_references(content, lp = "tab:")
-    content <- post_knit_caption_references(content, lp = "fig:")
+    # content <- post_knit_table_captions(
+    #   content = content,
+    #   tab.cap.pre = tables$caption$pre,
+    #   tab.cap.sep = tables$caption$sep,
+    #   style = tables$caption$style,
+    #   tab.lp = tables$tab.lp,
+    #   tnd = tables$caption$tnd,
+    #   tns = tables$caption$tns,
+    #   prop = tables$caption$fp_text
+    # )
+
+    content <- post_knit_caption_references(content, lp = tables$tab.lp)
+    content <- post_knit_caption_references(content, lp = plots$fig.lp)
     content <- post_knit_std_references(content, numbered = reference_num)
     content <- block_macro(content)
     writeLines(content, output_file)
@@ -455,7 +495,21 @@ rdocx_document <- function(base_format = "rmarkdown::word_document",
         footer = page_margins$footer,
         gutter = page_margins$gutter)
     )
+    defaut_sect_headers <- xml_find_all(docx_body_xml(x), "w:body/w:sectPr/w:headerReference")
+    defaut_sect_headers <- lapply(defaut_sect_headers, as_xml_document)
+    defaut_sect_footers <- xml_find_all(docx_body_xml(x), "w:body/w:sectPr/w:footerReference")
+    defaut_sect_footers <- lapply(defaut_sect_footers, as_xml_document)
+
     x <- body_set_default_section(x, default_sect_properties)
+    defaut_sect <- xml_find_first(docx_body_xml(x), "w:body/w:sectPr")
+
+    for(i in rev(seq_len(length(defaut_sect_footers)))){
+      xml_add_child(defaut_sect, defaut_sect_footers[[i]])
+    }
+
+    for(i in seq_len(length(defaut_sect_headers))){
+      xml_add_child(defaut_sect, defaut_sect_headers[[i]])
+    }
 
     forget(get_reference_rdocx)
     print(x, target = output_file)
