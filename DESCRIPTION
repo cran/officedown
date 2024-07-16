@@ -1,7 +1,7 @@
 Package: officedown
 Type: Package
 Title: Enhanced 'R Markdown' Format for 'Word' and 'PowerPoint'
-Version: 0.3.1
+Version: 0.3.3
 Authors@R: c(
     person("David", "Gohel", role = c("aut", "cre", "cph"),
     email = "david.gohel@ardata.fr"),
@@ -31,12 +31,12 @@ Suggests: ggplot2, flextable (>= 0.7.0), bookdown (>= 0.13), testthat
 URL: https://ardata-fr.github.io/officeverse/,
         https://davidgohel.github.io/officedown/
 BugReports: https://github.com/davidgohel/officedown/discussions
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.2
 SystemRequirements: pandoc (>= 2.0) - http://pandoc.org
 VignetteBuilder: knitr
 Config/testthat/edition: 3
 NeedsCompilation: no
-Packaged: 2023-09-02 16:53:22 UTC; davidgohel
+Packaged: 2024-07-16 08:08:22 UTC; davidgohel
 Author: David Gohel [aut, cre, cph],
   ArData [cph],
   Institut für Qualitätssicherung und Transparenz im Gesundheitswesen
@@ -46,4 +46,4 @@ Author: David Gohel [aut, cre, cph],
   Martin Camitz [ctb]
 Maintainer: David Gohel <david.gohel@ardata.fr>
 Repository: CRAN
-Date/Publication: 2023-09-02 17:10:02 UTC
+Date/Publication: 2024-07-16 21:10:01 UTC
