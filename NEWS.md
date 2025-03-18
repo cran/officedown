@@ -1,4 +1,22 @@
-# officedown 0.3.2
+# officedown 0.4.0
+
+## new feature
+
+- plots now accept chunk options `out.width` and `out.height`
+if expressed in percent. #144
+
+## issues
+
+- fix `get_fun()` function
+- fix BugReports links for CRAN check
+
+# officedown 0.3.3
+
+## issues
+
+- fix manual links for CRAN check
+
+# officedown 0.3.3
 
 ## issues
 

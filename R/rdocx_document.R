@@ -2,7 +2,7 @@
 #' @importFrom utils getAnywhere getFromNamespace
 get_fun <- function(x){
   if( grepl("::", x, fixed = TRUE) ){
-    coumpounds <- strsplit(x, split = "::", x, fixed = TRUE)[[1]]
+    coumpounds <- strsplit(x, split = "::", fixed = TRUE)[[1]]
     z <- getFromNamespace(coumpounds[2], ns = coumpounds[1] )
   } else {
     z <- getAnywhere(x)
@@ -164,7 +164,10 @@ get_reference_rdocx <- memoise(get_docx_uncached)
 #'
 #' ```{r child = "man/rdocx/rmarkdown-yaml.Rmd"}
 #' ```
-#'
+#' @section Known limitations:
+#' When using `knitr::include_graphics()` in 'rdocx_document',
+#' the image must be local, while with standard 'R Markdown'
+#' output documents, images located on Internet are supported.
 #' @examples
 #' # rdocx_document basic example -----
 #' @example examples/rdocx_document.R
